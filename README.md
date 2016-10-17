@@ -20,10 +20,6 @@ And then execute:
 
     $ bundle install
 
-Or install it yourself as:
-
-    $ gem install auto-session-timeout
-
 ## Usage
 
 After installing, tell your application controller to use auto timeout:
@@ -80,25 +76,25 @@ You're done! Enjoy watching your sessions automatically timeout.
 ## Additional Configuration
 
 By default, the JavaScript code:
-- checks the server every *60 seconds* for active sessions. 
-- loads a refresher script to refresh rails' authenticity token every *60 seconds*, if the User (or your devise_model name) is not logged in.
+- checks the server every **60 seconds** for active sessions. 
+- loads a refresher script to refresh rails' authenticity token every **60 seconds**, if the User (or your devise_model name) is not logged in.
 - displays development logs in the console.
-- recognizes your devise_model name as *User*
+- recognizes your devise_model name as **User**
 
-frequency: ENV['TIMEOUT_CHECK_DURATION'].to_i, 
-refresh_rate: ENV['SESSION_TIMEOUT'].to_i,
-verbosity: Rails.env.development? ? 2 : 0,
-devise_model: 'admin' %>
-
-If you prefer that it check more frequently, pass a
-frequency attribute to the helper method. The frequency is given in
-seconds. The following example checks the server every 15 seconds:
+If you prefer that to have more flexibility, the following code:
+- checks the server every **15 seconds** for active sessions. 
+- refresh rails' authenticity token every **25 seconds**, if the User (or your devise_model name) is not logged in.
+- hides development logs from the console.
+- recognizes your devise_model name as **manager** 
 
     <html>
       <head>...</head>
       <body>
         ...
-        <%= auto_session_timeout_js frequency: 15 %>
+        <%= auto_session_timeout_js frequency: 20, #in seconds
+                                    refresh_rate: 60, #in seconds
+                                    verbosity: 0, # 2 - display all logs, 1 - display some logs, 0 - hides all logs
+                                    devise_model: 'manager' %>
       </body>
     </html>
 
