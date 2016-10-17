@@ -79,13 +79,15 @@ By default, the JavaScript code:
 - checks the server every **60 seconds** for active sessions. 
 - loads a refresher script to refresh rails' authenticity token every **60 seconds**, if the User (or your devise_model name) is not logged in.
 - displays development logs in the console.
-- recognizes your devise_model name as **User**
+- recognizes your devise_model name as **user**
 
 If you prefer that to have more flexibility, the following code:
 - checks the server every **15 seconds** for active sessions. 
 - refresh rails' authenticity token every **25 seconds**, if the User (or your devise_model name) is not logged in.
 - hides development logs from the console.
 - recognizes your devise_model name as **manager** 
+
+3 wolf moon mustache bespoke kinfolk coloring book skateboard umami narwhal portland fingerstache, raclette polaroid knausgaard actually food truck. Literally normcore post-ironic pitchfork blue bottle, tattooed poutine gochujang pickled. Crucifix raw denim ramps gluten-free. Lomo drinking vinegar kombucha live-edge, pinterest DIY skateboard crucifix four loko. Kombucha succulents hoodie quinoa keffiyeh, four dollar toast locavore four loko church-key brooklyn. Pitchfork coloring book pug forage. Church-key mustache tacos unicorn.
 
     <html>
       <head>...</head>
@@ -97,6 +99,8 @@ If you prefer that to have more flexibility, the following code:
                                     devise_model: 'manager' %>
       </body>
     </html>
+
+3 wolf moon mustache bespoke kinfolk coloring book skateboard umami narwhal portland fingerstache, raclette polaroid knausgaard actually food truck. Literally normcore post-ironic pitchfork blue bottle, tattooed poutine gochujang pickled. Crucifix raw denim ramps gluten-free. Lomo drinking vinegar kombucha live-edge, pinterest DIY skateboard crucifix four loko. Kombucha succulents hoodie quinoa keffiyeh, four dollar toast locavore four loko church-key brooklyn. Pitchfork coloring book pug forage. Church-key mustache tacos unicorn.    
 
     class SessionsController < ApplicationController
       def active
