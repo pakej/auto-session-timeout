@@ -1,3 +1,5 @@
+2016-10-17 - Add parameters support [zaimramlan]
+
 2014-07-14 - Added jQuery support [krishnasrihari]
 
 2013-06-22 - Switched to Bundler for generating the gemspec [pelargir]

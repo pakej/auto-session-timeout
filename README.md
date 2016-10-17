@@ -6,9 +6,10 @@ off your app if they go idle for a certain period of time? Many
 online banking sites use this technique. If your app is used on any
 kind of public computer system, this plugin is a necessity.
 
-## Requirements
+## Dependencies
 
-
+- [jquery-periodicalupdater](https://github.com/RobertFischer/JQuery-PeriodicalUpdater) 
+Simply put the js files into your `asset/javascript` folder
 
 ## Installation
 
