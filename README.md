@@ -66,10 +66,11 @@ entirely with your own custom code:
 
 In any of these cases, make sure to properly map the actions in your routes.rb file:
   
-  devise_scope :admin do
-    match 'active'  => 'admins/sessions#active',  via: :get
-    match 'timeout' => 'admins/sessions#timeout', via: :get
-  end
+    # you can replace 'user' with your devise model's name
+    devise_scope :user do
+      match 'active'  => 'users/sessions#active',  via: :get
+      match 'timeout' => 'users/sessions#timeout', via: :get
+    end
 
 You're done! Enjoy watching your sessions automatically timeout.
 
@@ -79,15 +80,15 @@ By default, the JavaScript code:
 - displays development logs in the console.
 - checks the server every **60 seconds** for active sessions. 
 - loads a refresher script to refresh rails' authenticity token every **60 seconds**, if the User (or your devise_model name) is not logged in.
-- recognizes your devise_model name as **user**
+- recognizes your `devise_model` name as **user**
 
 If you prefer that to have more flexibility, the following code:
 - hides development logs from the console.
 - checks the server every **15 seconds** for active sessions. 
 - refresh rails' authenticity token every **25 seconds**, if the *manager* is not logged in.
-- recognizes your devise_model name as **manager** 
+- recognizes your `devise_model` name as **manager** 
 
-Simply modify the following code for extra customization to the code.
+Simply modify the following code for extra customization.
 
     <html>
       <head>...</head>
@@ -100,7 +101,7 @@ Simply modify the following code for extra customization to the code.
       </body>
     </html>
 
-Also, you can call the render_session_status and render_session_timeout methods to use the default implementation from the plugin
+Also, you can call the `render_session_status` and `render_session_timeout` methods to use the default implementation from the plugin
 with your own parameters as follows:
 
     class SessionsController < ApplicationController
