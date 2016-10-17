@@ -79,7 +79,9 @@ You can specify the following parameters to further customize `auto_session_time
 
 |    Options    |                            Function                             | Value Type  |                             Example                               | Default Value   |
 |:------------: |:-------------------------------------------------------------:  |:----------: |:---------------------------------------------------------------:  |:-------------:  |
-|   verbosity   |        Displays logs in the browser's developer console         |   Integer   | 2 - Display all logs 1 - Display some logs,  0 - Hides all logs   |       2         |
+|   verbosity   |        Displays logs in the browser's developer console         |   Integer   | 2 - Display all logs                                              |                 |
+                                                                                                | 1 - Display some logs                                             |       2         |
+                                                                                                | 0 - Hides all logs                                                |                 | 
 |   frequency   |     Frequency to check the server for any active sessions       |   Integer   |                         60 - In Seconds                           |       60        |
 | refresh_rate  | Rate of refresher script to refresh rails' authenticity token   |   Integer   |                         90 - In Seconds                           |       60        |
 | devise_model  |                   Name of your devise_model                     |   String    |                             'admin'                               |     'user'      |
