@@ -20,19 +20,26 @@ module AutoSessionTimeout
     end
     
     def auto_session_timeout_actions
-      define_method(:active) { render_session_status }
+      define_method(:active)  { render_session_status }
       define_method(:timeout) { render_session_timeout }
     end
   end
   
-  def render_session_status
-    response.headers["Etag"] = ""  # clear etags to prevent caching
-    render text: !!current_user, status: 200
+  def render_session_status(options={})
+    devise_model  = options[:devise_model]  || "user"
+    devise_model  = eval("current_#{devise_model}")     
+    # clear etags to prevent caching
+    response.headers["Etag"] = ""  
+    render text: !!devise_model, status: 200
   end
   
-  def render_session_timeout
-    flash[:notice] = "Your session has timed out."
-    redirect_to "/login"
+  def render_session_timeout(options={})
+    path          = options[:path]          || "/login"
+    flash_name    = options[:flash_name]    || "notice"
+    flash_message = options[:flash_message] || "Your session has timed out."
+
+    eval("flash[:#{flash_name}] = \"#{flash_message}\"")
+    redirect_to path    
   end
   
 end

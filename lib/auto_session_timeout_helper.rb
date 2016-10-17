@@ -44,7 +44,7 @@ JS
 
   def refresher_js(refresh_rate)
     code = <<JS
-setInterval(function(){ location.reload(); }, (#{refresh_rate} * 1000))
+setInterval(function(){ location.reload(); }, (#{refresh_rate} * 1000 * 60))
 JS
     javascript_tag(code)
   end
