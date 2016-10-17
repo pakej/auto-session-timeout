@@ -76,8 +76,9 @@ You're done! Enjoy watching your sessions automatically timeout.
 
 ## Additional Configuration
 You can specify the following parameters to further customize `auto_session_timeout_js`:
+
 |    Options   |                            Function                           | Value Type |                             Example                             | Default Value |
-|:------------:|:-------------------------------------------------------------:|:----------:|:---------------------------------------------------------------:|---------------|
+| ------------ | ------------------------------------------------------------- | ---------- | --------------------------------------------------------------- |---------------|
 |   verbosity  |        Displays logs in the browser's developer console       |   Integer  | 2 - Display all logs 1 - Display some logs,  0 - Hides all logs |       2       |
 |   frequency  |     Frequency to check the server for any active sessions     |   Integer  |                         60 - In Seconds                         |       60      |
 | refresh_rate | Rate of refresher script to refresh rails' authenticity token |   Integer  |                         90 - In Seconds                         |       60      |
