@@ -1,10 +1,22 @@
 module AutoSessionTimeoutHelper
   def auto_session_timeout_js(options={})
-    frequency = options[:frequency] || 60
-    verbosity = options[:verbosity] || 2
+    frequency    = options[:frequency]    || 60
+    verbosity    = options[:verbosity]    || 2
+    refresh_rate = options[:refresh_rate] || 60
+    devise_model = options[:devise_model] || "user"
+    devise_model = eval("current_#{devise_model}")
+
+    if devise_model.present?
+      checker_js(frequency, verbosity)
+    else
+      refresher_js(refresh_rate)
+    end
+  end
+
+  def checker_js(frequency, verbosity)
     code = <<JS
 if (typeof(Ajax) != 'undefined') {
-  new Ajax.PeriodicalUpdater('', '/active', {frequency:#{frequency}, method:'get', onSuccess: function(e) {
+  new Ajax.PeriodicalUpdater('', '/active', {frequency:#{frequency}, verbose:#{verbosity}, method:'get', onSuccess: function(e) {
     if (e.responseText == 'false') window.location.href = '/timeout';
   }});
 }else if(typeof(jQuery) != 'undefined'){
@@ -26,6 +38,13 @@ if (typeof(Ajax) != 'undefined') {
       window.location.href = '/timeout';
   });
 }
+JS
+    javascript_tag(code)
+  end
+
+  def refresher_js(refresh_rate)
+    code = <<JS
+setInterval(function(){ location.reload(); }, (#{refresh_rate} * 1000 * 60))
 JS
     javascript_tag(code)
   end
