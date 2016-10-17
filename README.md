@@ -79,9 +79,7 @@ You can specify the following parameters to further customize `auto_session_time
 
 |    Options    |                            Function                             | Value Type  |                             Example                               | Default Value   |
 |:------------: |:-------------------------------------------------------------:  |:----------: |:---------------------------------------------------------------:  |:-------------:  |
-|   verbosity   |        Displays logs in the browser's developer console         |   Integer   | 2 - Display all logs                                              |                 |
-                                                                                                | 1 - Display some logs                                             |       2         |
-                                                                                                | 0 - Hides all logs                                                |                 | 
+|   verbosity   |        Displays logs in the browser's developer console         |   Integer   | 2 - Display all logs, 1 - Display some logs,  0 - Hides all logs  |       2         |
 |   frequency   |     Frequency to check the server for any active sessions       |   Integer   |                         60 - In Seconds                           |       60        |
 | refresh_rate  | Rate of refresher script to refresh rails' authenticity token   |   Integer   |                         90 - In Seconds                           |       60        |
 | devise_model  |                   Name of your devise_model                     |   String    |                             'admin'                               |     'user'      |
@@ -92,7 +90,7 @@ If you prefer that to have more flexibility, the following code:
 - refresh rails' authenticity token every **50 seconds**, if the *manager* is not logged in.
 - recognizes your `devise_model` name as **manager** 
 
-Simply modify the following code for extra customization.
+Simply modify the following code.
 
     <html>
       <head>...</head>
@@ -108,19 +106,23 @@ Simply modify the following code for extra customization.
 Also, you can call the `render_session_status` and `render_session_timeout` methods to use the default implementation from the plugin
 with your own parameters as follows:
 
+|         Method          |    Options      |                           Function                            | Value Type  |       Example       |         Default Value           |
+|:----------------------: |:-------------:  |:------------------------------------------------------------: |:----------: |:------------------: |:-----------------------------:  |
+|  render_session_status  |  devise_model   |                   Name of your devise_model                   |   String    |       'admin'       |             "user"              |
+| render_session_timeout  |      path       |         Path to redirect to, when the session expires         |   String    |    "/user_login"    |            "/login"             |
+|                         |   flash_name    |                      Name of your flash                       |   String    |       "alert"       |            "notice"             |
+|                         | flash_message   | Message to be shown through flash when the session timed out  |   String    | "Session Expired."  | "Your session has timed out."   |
+
+The following is an example usage of the parameters.
+
     class SessionsController < ApplicationController
       def active
         # render_session_status devise_model: '<your_devise_model_name>'
-        # by default, devise_model: 'user'
         render_session_status devise_model: 'admin'
       end
       
       def timeout
         # render_session_timeout path: <path_to_redirect_to>, '<flash_name>', '<flash_message>'
-        # by default, 
-        # path:           '/login'
-        # flash_name:     'notice'
-        # flash_message:  'Your session has timed out.'
         render_session_timeout path: new_admin_session_path, flash_name: 'alert', flash_message: 'Session expired.'
       end
     end
