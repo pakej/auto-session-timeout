@@ -75,17 +75,18 @@ In any of these cases, make sure to properly map the actions in your routes.rb f
 You're done! Enjoy watching your sessions automatically timeout.
 
 ## Additional Configuration
-
-By default, the JavaScript code:
-- displays development logs in the console.
-- checks the server every **60 seconds** for active sessions. 
-- loads a refresher script to refresh rails' authenticity token every **60 seconds**, if the User (or your devise_model name) is not logged in.
-- recognizes your `devise_model` name as **user**
+You can specify the following parameters to further customize `auto_session_timeout_js`:
+|    Options   |                            Function                           | Value Type |                             Example                             | Default Value |
+|:------------:|:-------------------------------------------------------------:|:----------:|:---------------------------------------------------------------:|---------------|
+|   verbosity  |        Displays logs in the browser's developer console       |   Integer  | 2 - Display all logs 1 - Display some logs,  0 - Hides all logs |       2       |
+|   frequency  |     Frequency to check the server for any active sessions     |   Integer  |                         60 - In Seconds                         |       60      |
+| refresh_rate | Rate of refresher script to refresh rails' authenticity token |   Integer  |                         90 - In Seconds                         |       60      |
+| devise_model |                   Name of your devise_model                   |   String   |                             'admin'                             |     'user'    |
 
 If you prefer that to have more flexibility, the following code:
 - hides development logs from the console.
-- checks the server every **15 seconds** for active sessions. 
-- refresh rails' authenticity token every **25 seconds**, if the *manager* is not logged in.
+- checks the server every **20 seconds** for active sessions. 
+- refresh rails' authenticity token every **50 seconds**, if the *manager* is not logged in.
 - recognizes your `devise_model` name as **manager** 
 
 Simply modify the following code for extra customization.
@@ -96,7 +97,7 @@ Simply modify the following code for extra customization.
         ...
         <%= auto_session_timeout_js verbosity: 0,     # 2 - display all logs, 1 - display some logs, 0 - hides all logs
                                     frequency: 20,    #in seconds
-                                    refresh_rate: 60, #in seconds
+                                    refresh_rate: 50, #in seconds
                                     devise_model: 'manager' %>
       </body>
     </html>
@@ -120,6 +121,19 @@ with your own parameters as follows:
         render_session_timeout path: new_admin_session_path, flash_name: 'alert', flash_message: 'Session expired.'
       end
     end
+
+## Additional Information
+
+**TL;DR**: It is best to keep the refresher script, to refresh at the same rate as the
+session times out.  
+(i.e. if `auto_session_timeout 1.minute`, so does `refresher_rate: 60 #in seconds`)
+
+If we set the `auto_session_timeout` in `application_controller.rb`, regardless of an existing session,
+it will still 'expire' at the time set. This will expire the rails `authenticity_token` as well. Therefore,
+if we were to re-login without refreshing the `authenticity_token`, it will render an error page after
+submitting the login credentials.
+
+If we auto refresh the `authenticity_token`, the re-login process should submit with no problems.
 
 ## Resources
 
