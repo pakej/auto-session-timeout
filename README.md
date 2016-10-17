@@ -1,4 +1,4 @@
-# auto-session-timeout
+# auto-session-timeout (with devise)
 
 Provides automatic session timeout in a Rails application. Very easy
 to install and configure. Have you ever wanted to force your users
@@ -6,15 +6,19 @@ off your app if they go idle for a certain period of time? Many
 online banking sites use this technique. If your app is used on any
 kind of public computer system, this plugin is a necessity.
 
+## Requirements
+
+
+
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'auto-session-timeout'
+    gem 'auto-session-timeout', :git => 'https://github.com/zaimramlan/auto-session-timeout.git'
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
@@ -31,14 +35,11 @@ After installing, tell your application controller to use auto timeout:
 
 You will also need to insert this line inside the body tags in your
 views. The easiest way to do this is to insert it once inside your
-default or application-wide layout. Make sure you are only rendering
-it if the user is logged in, otherwise the plugin will attempt to force
-non-existent sessions to timeout, wreaking havoc:
+default or application-wide layout:
 
     <body>
-      <% if current_user %>
-        <%= auto_session_timeout_js %>
-      <% end %>
+      ...
+      <%= auto_session_timeout_js %>
     </body>
 
 You need to setup two actions: one to return the session status and
@@ -52,60 +53,74 @@ controller (most likely your user or session controller):
 
 To customize the default actions, simply override them. You can call
 the render_session_status and render_session_timeout methods to use
-the default implementation from the plugin, or you can define the
-actions entirely with your own custom code:
+the default implementation from the plugin or you can define the actions 
+entirely with your own custom code:
 
     class SessionsController < ApplicationController
       def active
-       render_session_status
+        render_session_status
+        # or do something when session is still active
       end
       
       def timeout
         render_session_timeout
+        # or do something when session expires
       end
     end
 
-In any of these cases, make sure to properly map the actions in
-your routes.rb file:
-
-    match 'active'  => 'sessions#active',  via: :get
-    match 'timeout' => 'sessions#timeout', via: :get
+In any of these cases, make sure to properly map the actions in your routes.rb file:
+  
+  devise_scope :admin do
+    match 'active'  => 'admins/sessions#active',  via: :get
+    match 'timeout' => 'admins/sessions#timeout', via: :get
+  end
 
 You're done! Enjoy watching your sessions automatically timeout.
 
 ## Additional Configuration
 
-By default, the JavaScript code checks the server every 60 seconds for
-active sessions. If you prefer that it check more frequently, pass a
+By default, the JavaScript code:
+- checks the server every *60 seconds* for active sessions. 
+- loads a refresher script to refresh rails' authenticity token every *60 seconds*, if the User (or your devise_model name) is not logged in.
+- displays development logs in the console.
+- recognizes your devise_model name as *User*
+
+frequency: ENV['TIMEOUT_CHECK_DURATION'].to_i, 
+refresh_rate: ENV['SESSION_TIMEOUT'].to_i,
+verbosity: Rails.env.development? ? 2 : 0,
+devise_model: 'admin' %>
+
+If you prefer that it check more frequently, pass a
 frequency attribute to the helper method. The frequency is given in
 seconds. The following example checks the server every 15 seconds:
 
     <html>
       <head>...</head>
       <body>
-        <% if current_user %>
-          <%= auto_session_timeout_js frequency: 15 %>
-        <% end %>
         ...
+        <%= auto_session_timeout_js frequency: 15 %>
       </body>
     </html>
 
-## TODO
-
-* current_user must be defined
-* using Prototype vs. jQuery
-* setting timeout in controller vs. user
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+    class SessionsController < ApplicationController
+      def active
+        # render_session_status devise_model: '<your_devise_model_name>'
+        # by default, devise_model: 'user'
+        render_session_status devise_model: 'admin'
+      end
+      
+      def timeout
+        # render_session_timeout path: <path_to_redirect_to>, '<flash_name>', '<flash_message>'
+        # by default, 
+        # path:           '/login'
+        # flash_name:     'notice'
+        # flash_message:  'Your session has timed out.'
+        render_session_timeout path: new_admin_session_path, flash_name: 'alert', flash_message: 'Session expired.'
+      end
+    end
 
 ## Resources
 
-* Repository: http://github.com/pelargir/auto-session-timeout/
+* Original Repository: http://github.com/pelargir/auto-session-timeout/
 * Blog: http://www.matthewbass.com
 * Author: Matthew Bass
