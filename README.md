@@ -8,14 +8,14 @@ kind of public computer system, this plugin is a necessity.
 
 ## Dependencies
 
-- [jquery-periodicalupdater](https://github.com/RobertFischer/JQuery-PeriodicalUpdater) 
+- [jquery-periodicalupdater](https://github.com/RobertFischer/JQuery-PeriodicalUpdater)
 Simply put the js files into your `asset/javascript` folder
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'auto-session-timeout', :git => 'https://github.com/zaimramlan/auto-session-timeout.git'
+    gem 'auto-session-timeout', :git => 'https://github.com/pakej/auto-session-timeout.git'
 
 And then execute:
 
@@ -50,7 +50,7 @@ controller (most likely your user or session controller):
 
 To customize the default actions, simply override them. You can call
 the render_session_status and render_session_timeout methods to use
-the default implementation from the plugin or you can define the actions 
+the default implementation from the plugin or you can define the actions
 entirely with your own custom code:
 
     class SessionsController < ApplicationController
@@ -58,7 +58,7 @@ entirely with your own custom code:
         render_session_status
         # or do something when session is still active
       end
-      
+
       def timeout
         render_session_timeout
         # or do something when session expires
@@ -66,7 +66,7 @@ entirely with your own custom code:
     end
 
 In any of these cases, make sure to properly map the actions in your routes.rb file:
-  
+
     # you can replace 'user' with your devise model's name
     devise_scope :user do
       match 'active'  => 'users/sessions#active',  via: :get
@@ -87,9 +87,9 @@ You can specify the following parameters to further customize `auto_session_time
 
 If you prefer that to have more flexibility, the following code:
 - hides development logs from the console.
-- checks the server every **20 seconds** for active sessions. 
+- checks the server every **20 seconds** for active sessions.
 - refresh rails' authenticity token every **50 seconds**, if the *manager* is not logged in.
-- recognizes your `devise_model` name as **manager** 
+- recognizes your `devise_model` name as **manager**
 
 Simply modify the following code.
 
@@ -121,7 +121,7 @@ The following is an example usage of the parameters.
         # render_session_status devise_model: '<your_devise_model_name>'
         render_session_status devise_model: 'admin'
       end
-      
+
       def timeout
         # render_session_timeout path: <path_to_redirect_to>, '<flash_name>', '<flash_message>'
         render_session_timeout path: new_admin_session_path, flash_name: 'alert', flash_message: 'Session expired.'
@@ -131,7 +131,7 @@ The following is an example usage of the parameters.
 ## Additional Information
 
 **TL;DR**: It is best to keep the refresher script, to refresh at the same rate as the
-session times out.  
+session times out.
 (i.e. if `auto_session_timeout 1.minute`, so does `refresher_rate: 60 #in seconds`)
 
 If we set the `auto_session_timeout` in `application_controller.rb`, regardless of an existing session,
